@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysTrendMapper">
+
+<!--    根据宝宝id和用户id获取宝宝的记录动态-->
+    <select id="listTrend" resultType="com.xhu.javaprobaby.pojo.vo.TrendVO">
+      select st.trend_id,st.user_id,st.username,st.baby_id,st.level,st.content as trendContent,st.trend_photo,
+            st.trend_video,st.upload_time,st.create_time,si.user_id,si.identity
+            from sys_identity si inner join sys_trend st
+            on st.baby_id = si.baby_id and st.user_id = si.user_id
+			where (level = 1 and st.baby_id = #{babyId} and st.user_id=#{userId}) or (level = 0 and st.baby_id = #{babyId})
+            order by upload_time desc,create_time desc
+    </select>
+
+    <!--    根据动态id获取首页动态详情-->
+    <select id="gettrendByIndex" resultType="com.xhu.javaprobaby.pojo.vo.TrendVO">
+      select DISTINCT st.trend_id,st.user_id,st.username,st.baby_id,st.level,st.content as trendContent,st.trend_photo,
+        st.trend_video,st.upload_time,st.create_time,si.identity
+            from sys_trend st  inner join sys_identity si
+            on st.baby_id = si.baby_id and st.user_id = si.user_id
+            where st.trend_id = #{trendId}
+            order by upload_time desc,create_time desc
+    </select>
+
+<!--    获取自己有权限查看的所有动态-->
+    <select id="listTrends" resultType="com.xhu.javaprobaby.pojo.vo.TrendVO">
+        select st.trend_id,st.user_id,st.username,su.user_photo,st.baby_id,st.level,st.content as trendContent,st.trend_photo,
+            st.trend_video,st.upload_time,st.create_time
+            from sys_user su inner join sys_trend st on su.user_id = st.user_id
+            where  (level = 1 and st.user_id = #{userId}) or level =0
+            order by st.create_time desc
+    </select>
+
+    <!--    获取社区动态详情-->
+    <select id="getTrend" resultType="com.xhu.javaprobaby.pojo.vo.TrendVO">
+        select DISTINCT st.trend_id,st.user_id,st.username,su.user_photo,st.baby_id,st.level,st.content as trendContent,st.trend_photo,
+            st.trend_video,st.upload_time,st.create_time
+            from sys_user su inner join sys_trend st on su.user_id = st.user_id
+            where st.trend_id = #{trendId}
+            order by create_time desc
+    </select>
+
+<!--    增加动态-->
+    <insert id="insert" parameterType="com.xhu.javaprobaby.pojo.SysTrend" useGeneratedKeys="true" keyProperty="trendId">
+        insert into sys_trend
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="username != null" >
+                username,
+            </if>
+            <if test="babyId != null" >
+                baby_id,
+            </if>
+            <if test="level != null" >
+                level,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="trendPhoto != null" >
+                trend_photo,
+            </if>
+            <if test="trendVideo != null" >
+                trend_video,
+            </if>
+            <if test="uploadTime != null" >
+                upload_time,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="modifiedTime != null" >
+                modified_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null" >
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="babyId != null" >
+                #{babyId,jdbcType=INTEGER},
+            </if>
+            <if test="level != null" >
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="trendPhoto != null" >
+                #{trendPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="trendVideo != null" >
+                #{trendVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="uploadTime != null" >
+                #{uploadTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedTime != null" >
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+<!--    获取全部动态-->
+    <select id="listAll" resultType="com.xhu.javaprobaby.pojo.vo.TrendVO">
+        select st.trend_id,st.user_id,st.username,su.user_photo,st.baby_id,st.content as trendContent,st.trend_photo,
+            st.trend_video,st.upload_time,st.create_time
+        from sys_user su inner join sys_trend st on su.user_id = st.user_id
+    </select>
+
+<!--    根据宝宝id查询动态-->
+    <select id="listByBabyId" resultType="java.lang.Integer">
+        select trend_id from sys_trend where baby_id = #{babyId}
+    </select>
+
+
+<!--    根据用户id修改动态表中的用户信息（username）-->
+    <update id="update" parameterType="com.xhu.javaprobaby.pojo.SysTrend">
+        update sys_trend
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where
+        <if test="userId != null">
+            user_id = #{userId}
+        </if>
+    </update>
+
+
+    <!--    修改动态信息-->
+    <update id="updateTrend" parameterType="com.xhu.javaprobaby.pojo.SysTrend">
+        update sys_trend
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null and username != ''">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="babyId != null">
+                baby_id = #{babyId,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            content = #{content,jdbcType=VARCHAR},
+            trend_photo = #{trendPhoto,jdbcType=VARCHAR},
+            trend_video = #{trendVideo,jdbcType=VARCHAR},
+            <if test="uploadTime != null">
+                upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where trend_id = #{trendId}
+    </update>
+
+</mapper>

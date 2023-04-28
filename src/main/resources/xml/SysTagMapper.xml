@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysTagMapper">
+
+<!--    获取所有标签-->
+    <select id="listTag" resultType="com.xhu.javaprobaby.pojo.SysTag">
+        select * from sys_tag order by tag_id desc
+    </select>
+
+<!--    根据标签内容获取标签-->
+    <select id="getTag" resultType="com.xhu.javaprobaby.pojo.SysTag">
+        select * from sys_tag where content = #{content}
+    </select>
+
+<!--    根据动态id获取标签-->
+    <select id="listTags" resultType="com.xhu.javaprobaby.pojo.SysTag">
+        select * from sys_tag where tag_id in (
+            select tag_id from sys_trend_tag where trend_id = #{trendId})
+    </select>
+</mapper>

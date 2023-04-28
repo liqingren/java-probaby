@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysRecordMapper">
+
+<!--    获取所有记录-->
+    <select id="listRecord" resultType="com.xhu.javaprobaby.pojo.SysRecord">
+        select record_id,baby_id,height,weight,head,record_time,create_time from sys_record
+        where baby_id =#{babyId} order by record_time desc,create_time desc
+    </select>
+
+<!--    增加记录-->
+    <insert id="insert" parameterType="com.xhu.javaprobaby.pojo.SysRecord" useGeneratedKeys="true" keyProperty="recordId">
+        insert into sys_record
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="babyId != null" >
+                baby_id,
+            </if>
+            <if test="height != null" >
+                height,
+            </if>
+            <if test="weight != null" >
+                weight,
+            </if>
+            <if test="head != null" >
+                head,
+            </if>
+            <if test="recordTime != null" >
+                record_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="babyId != null" >
+                #{babyId,jdbcType=INTEGER},
+            </if>
+            <if test="height != null" >
+                #{height},
+            </if>
+            <if test="weight != null" >
+                #{weight},
+            </if>
+            <if test="head != null" >
+                #{head},
+            </if>
+            <if test="recordTime != null" >
+                #{recordTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

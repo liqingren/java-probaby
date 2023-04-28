@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysCommentMapper">
+    <sql id="Base_Column_List" >
+        comment_id, user_id, username, user_photo, parent_id, trend_id,content,media,comment_time
+    </sql>
+<!--    获取动态的评论-->
+    <select id="listComment" resultType="com.xhu.javaprobaby.pojo.SysComment">
+        select  <include refid="Base_Column_List"></include>
+        from sys_comment where trend_id = #{trendId}
+    </select>
+
+<!--    增加评论-->
+    <insert id="insertComment" parameterType="com.xhu.javaprobaby.pojo.SysComment" useGeneratedKeys="true" keyProperty="commentId">
+        insert into sys_comment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="username != null" >
+                username,
+            </if>
+            <if test="userPhoto != null" >
+                user_photo,
+            </if>
+            <if test="parentId != null" >
+                parent_id,
+            </if>
+            <if test="trendId != null" >
+                trend_id,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="media != null" >
+                media,
+            </if>
+            <if test="commentTime != null" >
+                comment_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="username != null" >
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhoto != null" >
+                #{userPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null" >
+                #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="trendId != null" >
+                #{trendId,jdbcType=INTEGER},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="media != null" >
+                #{media,jdbcType=VARCHAR},
+            </if>
+            <if test="commentTime != null" >
+                #{commentTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+
+    <!--    根据用户id修改评论表中的用户信息（username）-->
+    <update id="update" parameterType="com.xhu.javaprobaby.pojo.SysComment">
+        update sys_comment
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="userPhoto != null and userPhoto != ''">
+                user_photo = #{userPhoto},
+            </if>
+        </set>
+        where
+        <if test="userId != null">
+            user_id = #{userId}
+        </if>
+    </update>
+
+<!--    根据userId查询评论-->
+    <select id="listByUserId" resultType="com.xhu.javaprobaby.pojo.SysComment">
+        select <include refid="Base_Column_List"/>
+        from sys_comment where user_id = #{userId}
+    </select>
+
+
+<!--    根据父id查询评论-->
+    <select id="listByParentId" resultType="com.xhu.javaprobaby.pojo.SysComment">
+        select <include refid="Base_Column_List"/>
+        from sys_comment where parent_id = #{parentId}
+    </select>
+
+<!--    根据父id删除评论-->
+    <delete id="remove" parameterType="java.lang.Integer">
+        delete from sys_comment where parent_id = #{parentId}
+    </delete>
+</mapper>

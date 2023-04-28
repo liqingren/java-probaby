@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysTrendTagMapper">
+
+<!--    获取动态的标签关系-->
+    <select id="listTrendTag" resultType="com.xhu.javaprobaby.pojo.SysTrendTag">
+        select * from sys_trend_tag where trend_id = #{trendId}
+    </select>
+
+<!--    根据动态id删除动态-标签表数据-->
+    <delete id="remove" parameterType="java.lang.Integer">
+        delete from sys_trend_tag where trend_id = #{trendId}
+    </delete>
+
+<!--    获取第一次的标签-->
+    <select id="listFirst" resultType="com.xhu.javaprobaby.pojo.SysTrendTag">
+        select * from  sys_trend_tag stt inner join sys_tag st
+        on stt.tag_id = st.tag_id where st.content like '%第一次%'
+    </select>
+</mapper>

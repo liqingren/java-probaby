@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysCollectMapper">
+
+<!--    用户收藏的帖子-->
+    <select id="listCollect" resultType="com.xhu.javaprobaby.pojo.SysCollect">
+        select * from sys_collect where trend_id =#{trendId}
+    </select>
+
+<!--    删除收藏-->
+    <delete id="removeCollect">
+        delete from sys_collect where user_id = #{userId} and trend_id = #{trendId}
+    </delete>
+
+<!--    获取用户的收藏-->
+    <select id="listByUserId" resultType="com.xhu.javaprobaby.pojo.SysCollect">
+        select * from sys_collect where user_id = #{userId}
+    </select>
+
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysBabyMapper">
+
+<!--    根据用户id查询用户所有宝宝-->
+    <select id="listBabyByUserId" resultType="com.xhu.javaprobaby.pojo.SysBaby">
+        select sb.baby_id,sb.user_id,sb.nickname,sb.baby_birth,sb.baby_photo,sb.baby_sex,
+            sb.baby_blood,sb.baby_moment,sb.height,sb.weight
+        from sys_identity si inner join sys_baby sb
+        on si.baby_id = sb.baby_id where si.user_id = #{userId}
+        order by baby_birth asc
+    </select>
+
+<!--    修改宝宝信息-->
+    <update id="updateBaby" parameterType="com.xhu.javaprobaby.pojo.SysBaby">
+        update sys_baby
+            <set>
+                <if test="nickname != null and nickname != ''">
+                    nickname = #{nickname},
+                </if>
+                <if test="babySex != null">
+                    baby_sex = #{babySex},
+                </if>
+                <if test="babyPhoto != null and babyPhoto != ''">
+                    baby_photo = #{babyPhoto},
+                </if>
+                <if test="babyBirth != null">
+                    baby_birth = #{babyBirth},
+                </if>
+                <if test="babyBlood != null and babyBlood != ''">
+                    baby_blood = #{babyBlood},
+                </if>
+                <if test="babyMoment != null">
+                    baby_moment = #{babyMoment},
+                </if>
+                height = #{height},
+                weight = #{weight},
+                <if test="modifiedTime != null">
+                    modified_time = #{modifiedTime}
+                </if>
+            </set>
+        where baby_id = #{babyId}
+    </update>
+
+<!--    增加宝宝-->
+    <insert id="insert" parameterType="com.xhu.javaprobaby.pojo.SysBaby" useGeneratedKeys="true" keyProperty="babyId">
+        insert into sys_baby
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="nickname != null" >
+                nickname,
+            </if>
+            <if test="babySex != null" >
+                baby_sex,
+            </if>
+            <if test="babyPhoto != null" >
+                baby_photo,
+            </if>
+            <if test="babyBirth != null" >
+                baby_birth,
+            </if>
+            <if test="babyBlood != null" >
+                baby_blood,
+            </if>
+            <if test="babyMoment != null" >
+                baby_moment,
+            </if>
+            <if test="height != null" >
+                height,
+            </if>
+            <if test="weight != null" >
+                weight,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="modifiedTime != null" >
+                modified_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userId != null" >
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="nickname != null" >
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="babySex != null" >
+                #{babySex,jdbcType=BIT},
+            </if>
+            <if test="babyPhoto != null" >
+                #{babyPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="babyBirth != null" >
+                #{babyBirth,jdbcType=TIMESTAMP},
+            </if>
+            <if test="babyBlood != null" >
+                #{babyBlood,jdbcType=VARCHAR},
+            </if>
+            <if test="babyMoment != null" >
+                #{babyMoment,jdbcType=TIMESTAMP},
+            </if>
+            <if test="height != null" >
+                #{height},
+            </if>
+            <if test="weight != null" >
+                #{weight},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedTime != null" >
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

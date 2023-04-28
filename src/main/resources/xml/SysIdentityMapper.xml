@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysIdentityMapper">
+<!--    根据宝宝id查询身份信息-->
+    <select id="listIdentity" resultType="com.xhu.javaprobaby.pojo.SysIdentity">
+        select * from sys_identity where baby_id = #{babyId}
+    </select>
+
+<!--    根据宝宝id查询出所有亲友-->
+    <select id="list" resultType="com.xhu.javaprobaby.pojo.vo.RealtiveVO">
+        select su.user_id,su.username,su.user_photo,si.identity from sys_identity si
+            inner join  sys_user su on si.user_id = su.user_id where si.baby_id = #{babyId}
+    </select>
+
+
+<!--    根据宝宝id和用户id删除亲友关系-->
+    <delete id="removeIdentity" >
+        delete from sys_identity where baby_id = #{babyId} and user_id = #{userId}
+    </delete>
+</mapper>

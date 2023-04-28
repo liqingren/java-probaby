@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysLikeMapper">
+
+<!--    动态的点赞-->
+    <select id="listLike" resultType="com.xhu.javaprobaby.pojo.SysLike">
+        select * from sys_like where trend_id =#{trendId}
+    </select>
+
+<!--    取消点赞-->
+    <delete id="removeLike">
+        delete from sys_like where user_id = #{userId} and trend_id = #{trendId}
+    </delete>
+
+<!--    获取用户的点赞-->
+    <select id="listByUserId" resultType="com.xhu.javaprobaby.pojo.SysLike">
+        select * from sys_like where user_id = #{userId}
+    </select>
+</mapper>

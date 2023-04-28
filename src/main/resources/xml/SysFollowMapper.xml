@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysFollowMapper">
+
+<!--    查询用户关注的其他用户-->
+    <select id="listFollow" resultType="com.xhu.javaprobaby.pojo.SysFollow">
+        select * from sys_follow where follower_id = #{userId}
+    </select>
+
+<!--    取消关注-->
+    <delete id="remove" parameterType="java.lang.Integer">
+        delete from sys_follow where follower_id = #{followerId} and concerned_id = #{concernedId}
+    </delete>
+
+</mapper>
