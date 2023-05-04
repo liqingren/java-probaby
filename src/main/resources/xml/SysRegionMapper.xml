@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xhu.javaprobaby.mapper.SysRegionMapper">
+
+<!--    获取所有的省市-->
+    <select id="listRegion" resultType="com.xhu.javaprobaby.pojo.SysRegion">
+        select * from sys_region
+    </select>
+
+<!--    获取所有的省份-->
+    <select id="listProvince" resultType="com.xhu.javaprobaby.pojo.SysRegion">
+        select id,name from sys_region where level = 1
+    </select>
+</mapper>

@@ -2,15 +2,9 @@ package com.xhu.javaprobaby.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xhu.javaprobaby.common.Result;
-import com.xhu.javaprobaby.pojo.SysComment;
-import com.xhu.javaprobaby.pojo.SysFollow;
-import com.xhu.javaprobaby.pojo.SysTrend;
-import com.xhu.javaprobaby.pojo.SysUser;
+import com.xhu.javaprobaby.pojo.*;
 import com.xhu.javaprobaby.pojo.vo.TrendVO;
-import com.xhu.javaprobaby.service.impl.SysCommentServiceImpl;
-import com.xhu.javaprobaby.service.impl.SysFollowServiceImpl;
-import com.xhu.javaprobaby.service.impl.SysTrendServiceImpl;
-import com.xhu.javaprobaby.service.impl.SysUserServiceImpl;
+import com.xhu.javaprobaby.service.impl.*;
 import com.xhu.javaprobaby.util.DESUtils;
 import com.xhu.javaprobaby.util.JwtUtils;
 import org.apache.http.HttpResponse;
@@ -56,6 +50,9 @@ public class SysUserController {
 
     @Autowired
     SysCommentServiceImpl commentService;
+
+    @Autowired
+    SysRegionServiceImpl regionService;
 
     @Value("${mini.appid}")
     private String appid;
@@ -293,6 +290,18 @@ public class SysUserController {
         //过滤：获取到用户关注的用户信息
         List<SysUser> users = list.stream().filter(sysUser ->
                 ids.contains(sysUser.getUserId())).collect(Collectors.toList());
+
+        if(users.size()>0) {
+            for (SysUser user : users) {
+                if(user.getUserCity() != null && !user.getUserCity().equals("")) {
+                    //将代表省市的数字转成具体的某个省份
+                    String[] citys = user.getUserCity().split("-");
+                    Integer index = Integer.parseInt(citys[0]);//省份下标
+                    List<SysRegion> regions = regionService.listProvince();//省份集合
+                    user.setUserCity(regions.get(index).getName());
+                }
+            }
+        }
         return Result.success(users);
 
     }

@@ -70,7 +70,7 @@ public class SysUser implements Serializable {
     private Date userBirth;
 
     /**
-     * 地区
+     * 地区（第一个数：省，-，第二个数：市）
      */
     private String userCity;
 
