@@ -4,6 +4,7 @@ package com.xhu.javaprobaby.controller;
 import com.alibaba.fastjson.JSON;
 import com.xhu.javaprobaby.common.Result;
 import com.xhu.javaprobaby.pojo.*;
+import com.xhu.javaprobaby.pojo.vo.BloodEnum;
 import com.xhu.javaprobaby.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -112,15 +110,18 @@ public class SysBabyController {
     }
 
     /**
-     * 根据宝宝id获取宝宝信息
+     * 根据宝宝id获取宝宝信息以及血型枚举型集合
      * @param babyId
      * @return
      */
     @RequestMapping("/getbaby")
     public Result getBaby(@RequestParam("babyId") Integer babyId){
         SysBaby baby = babyService.getById(babyId);
-        List<SysRecord> list = recordService.listRecord(babyId);
-        return Result.success(baby);
+        List<String> bloods = BloodEnum.getBlood();
+        Map<String,Object> map = new HashMap<>();
+        map.put("baby",baby);
+        map.put("bloods",bloods);
+        return Result.success(map);
     }
 
     /**

@@ -4,17 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 权限枚举类
- * @since 2023-04-21
+ * 血型枚举类
+ * @since 2023-05-04
  */
-public enum LevelEnum {
-    OWNER(0,"所有人"),
-    ONESLFE(1,"仅自己");
+public enum BloodEnum {
+    TYPE_O(0,"O型"),
+    TYPE_A(1,"A型"),
+    TYPE_B(2,"B型"),
+    TYPE_AB(3,"AB型"),
+    TYPE_OTHER(4,"其他");
+
 
     private Integer key;
     private String value;
 
-    LevelEnum(Integer key, String value) {
+    BloodEnum(Integer key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -40,11 +44,13 @@ public enum LevelEnum {
      * 获取value
      * @return
      */
-    public static List<String> getLevel(){
+    public static List<String> getBlood(){
         List<String> list = new ArrayList<>();
-        for(LevelEnum level:LevelEnum.values()){
-            list.add(level.getValue());
+        for(BloodEnum blood:BloodEnum.values()){
+            list.add(blood.getValue());
         }
         return list;
     }
+
+
 }

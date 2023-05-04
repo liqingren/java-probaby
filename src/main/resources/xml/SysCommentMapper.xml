@@ -79,10 +79,7 @@
                 user_photo = #{userPhoto},
             </if>
         </set>
-        where
-        <if test="userId != null">
-            user_id = #{userId}
-        </if>
+        where user_id = #{userId}
     </update>
 
 <!--    根据userId查询评论-->

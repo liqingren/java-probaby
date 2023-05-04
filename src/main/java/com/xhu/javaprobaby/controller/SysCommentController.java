@@ -70,11 +70,11 @@ public class SysCommentController {
     }
 
 
-    @RequestMapping("/listcomment")
-    public Result listComment(@RequestParam("trendId") Integer trendId){
-        List<CommentVO> list = commentService.listComment(trendId);
-        return Result.success(list);
-    }
+//    @RequestMapping("/listcomment")
+//    public Result listComment(@RequestParam("trendId") Integer trendId){
+//        List<CommentVO> list = commentService.listComment(trendId);
+//        return Result.success(list);
+//    }
 
 
 }

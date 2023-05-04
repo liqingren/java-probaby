@@ -100,9 +100,7 @@ public class SysTrendController{
                             .build();
                     list1.add(trendTag);
                 }
-                for(SysTrendTag tag:list1){
-                    trendTagService.save(tag);
-                }
+                trendTagService.saveBatch(list1);//批量插入
 
                 return Result.success("动态上传成功");
             }
@@ -134,7 +132,7 @@ public class SysTrendController{
             t.setDiscusses(discussList);
 
         }
-        List<RealtiveVO> list2 = identityService.list(babyId);
+        List<RealtiveVO> list2 = identityService.list(babyId);//亲友集合
         Map<String,Object> map = new HashMap<>();
         map.put("trend",list);
         map.put("count",list2.size());

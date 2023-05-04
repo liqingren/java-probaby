@@ -134,10 +134,7 @@
                 modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
             </if>
         </set>
-        where
-        <if test="userId != null">
-            user_id = #{userId}
-        </if>
+        where user_id = #{userId}
     </update>
 
 

@@ -5,7 +5,7 @@
 <!--    获取所有记录-->
     <select id="listRecord" resultType="com.xhu.javaprobaby.pojo.SysRecord">
         select record_id,baby_id,height,weight,head,record_time,create_time from sys_record
-        where baby_id =#{babyId} order by record_time desc,create_time desc
+            where baby_id =#{babyId} order by record_time desc,create_time desc
     </select>
 
 <!--    增加记录-->
