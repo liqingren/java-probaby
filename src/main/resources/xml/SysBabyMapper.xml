@@ -8,7 +8,7 @@
             sb.baby_blood,sb.baby_moment,sb.height,sb.weight
         from sys_identity si inner join sys_baby sb
         on si.baby_id = sb.baby_id where si.user_id = #{userId}
-        order by baby_birth asc
+        order by create_time asc
     </select>
 
 <!--    修改宝宝信息-->
