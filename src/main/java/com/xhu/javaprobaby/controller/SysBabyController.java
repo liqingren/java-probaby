@@ -71,7 +71,7 @@ public class SysBabyController {
      * @return
      */
     @RequestMapping("/save")
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    @Transactional
     public Result save(@RequestBody Map<String, Object> data){
         try {
             //获取baby对象
@@ -244,7 +244,8 @@ public class SysBabyController {
      * @return
      */
     @RequestMapping("/removeIdentity")
-    public Result removeIdentity(@RequestParam("babyId") Integer babyId,@RequestParam("userId") Integer userId){
+    public Result removeIdentity(@RequestParam("babyId") Integer babyId,
+                                 @RequestParam("userId") Integer userId){
         int count = identityService.removeIdentity(babyId, userId);
         if(count>0){
             return Result.success("删除成功");

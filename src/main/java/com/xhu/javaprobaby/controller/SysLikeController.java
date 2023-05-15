@@ -48,7 +48,8 @@ public class SysLikeController {
      * @return
      */
     @RequestMapping("/remove")
-    public Result remove(@RequestParam("userId") Integer userId,@RequestParam("trendId") Integer trendId){
+    public Result remove(@RequestParam("userId") Integer userId,
+                         @RequestParam("trendId") Integer trendId){
         int count = likeService.removeLike(userId, trendId);
         if(count>0){
             return Result.success();

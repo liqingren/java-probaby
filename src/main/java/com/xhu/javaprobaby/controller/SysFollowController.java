@@ -48,7 +48,8 @@ public class SysFollowController {
      * @return
      */
     @RequestMapping("/remove")
-    public Result remove(@RequestParam("followerId") Integer followerId, @RequestParam("concernedId") Integer concernedId){
+    public Result remove(@RequestParam("followerId") Integer followerId,
+                         @RequestParam("concernedId") Integer concernedId){
         int count = followService.remove(followerId, concernedId);
         if(count>0){
             return Result.success("取关成功");

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/javaprobaby/trend")
-public class SysTrendController{
+public class SysTrendController {
 
     @Autowired
     SysUserServiceImpl userService;
@@ -68,32 +68,34 @@ public class SysTrendController{
 
     /**
      * 获取level枚举类的value值
+     *
      * @return
      */
     @RequestMapping("/getlevel")
-    public Result getLevel(){
+    public Result getLevel() {
         return Result.success(LevelEnum.getLevel());
     }
 
 
     /**
      * 增加动态
+     *
      * @param data
      * @return
      */
     @RequestMapping("/save")
     @Transactional
-    public Result save(@RequestBody Map<String,Object> data){
+    public Result save(@RequestBody Map<String, Object> data) {
         try {
             //获取动态trend对象和标签tags集合
             SysTrend trend = JSON.parseObject(JSON.toJSONString(data.get("trend")), SysTrend.class);
             List<SysTag> tags = JSONArray.parseArray(JSON.toJSONString(data.get("tags")), SysTag.class);
 
             int count = trendService.insert(trend);
-            if (count>0) {
+            if (count > 0) {
                 //获取动态标签数据
                 List<SysTrendTag> list1 = new ArrayList<>();
-                for(SysTag tag:tags){
+                for (SysTag tag : tags) {
                     SysTrendTag trendTag = SysTrendTag.builder()
                             .tagId(tag.getTagId())
                             .trendId(trend.getTrendId())
@@ -104,7 +106,7 @@ public class SysTrendController{
 
                 return Result.success("动态上传成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             //保证异常捕获之后事务还会回滚
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -115,15 +117,17 @@ public class SysTrendController{
 
     /**
      * 根据宝宝id和用户id获取宝宝的记录动态
+     *
      * @param babyId
      * @return
      */
     @RequestMapping("/listtrend")
-    public Result listTrend(@RequestParam("babyId") Integer babyId,@RequestParam("userId") Integer userId){
-        List<TrendVO> list = trendService.listTrend(babyId,userId);
-        for(TrendVO t:list){
+    public Result listTrend(@RequestParam("babyId") Integer babyId,
+                            @RequestParam("userId") Integer userId) {
+        List<TrendVO> list = trendService.listTrend(babyId, userId);
+        for (TrendVO t : list) {
             //转码内容（可能含emoji表情包）
-            if(t.getTrendContent() != null && !t.getTrendContent().equals("")) {
+            if (t.getTrendContent() != null && !t.getTrendContent().equals("")) {
                 t.setTrendContent(EmojiParser.parseToUnicode(t.getTrendContent()));
             }
 
@@ -133,24 +137,25 @@ public class SysTrendController{
 
         }
         List<RealtiveVO> list2 = identityService.list(babyId);//亲友集合
-        Map<String,Object> map = new HashMap<>();
-        map.put("trend",list);
-        map.put("count",list2.size());
+        Map<String, Object> map = new HashMap<>();
+        map.put("trend", list);
+        map.put("count", list2.size());
 
         return Result.success(map);
     }
 
     /**
      * 根据动态id获取首页动态详情
+     *
      * @param trendId
      * @return
      */
     @RequestMapping("/gettrendByIndex")
-    public Result getTrendByIndex(@RequestParam("trendId") Integer trendId){
+    public Result getTrendByIndex(@RequestParam("trendId") Integer trendId) {
         TrendVO trend = trendService.gettrendByIndex(trendId);
 
         //转码内容（可能含emoji表情包）
-        if(trend.getTrendContent() != null && !trend.getTrendContent().equals("")) {
+        if (trend.getTrendContent() != null && !trend.getTrendContent().equals("")) {
             trend.setTrendContent(EmojiParser.parseToUnicode(trend.getTrendContent()));
         }
         //标签
@@ -162,22 +167,22 @@ public class SysTrendController{
         List<SysDiscuss> discussList = discussService.listDiscuss(trendId);
         trend.setDiscusses(discussList);
 
-        return Result.success("成功",trend);
+        return Result.success("成功", trend);
     }
-
 
 
     /**
      * 获取自己有权限查看的所有动态
+     *
      * @param userId
      * @return
      */
     @RequestMapping("/list")
-    public Result listTrends(@RequestParam("userId") Integer userId){
+    public Result listTrends(@RequestParam("userId") Integer userId) {
         List<TrendVO> list = trendService.listTrends(userId);
-        for(TrendVO t:list){
+        for (TrendVO t : list) {
             //转码内容（可能含emoji表情包）
-            if(t.getTrendContent() != null && !t.getTrendContent().equals("")) {
+            if (t.getTrendContent() != null && !t.getTrendContent().equals("")) {
                 t.setTrendContent(EmojiParser.parseToUnicode(t.getTrendContent()));
             }
 
@@ -212,14 +217,15 @@ public class SysTrendController{
 
     /**
      * 社区动态详情
+     *
      * @param trendId
      * @return
      */
     @RequestMapping("/gettrend")
-    public Result getTrend(@RequestParam("trendId") Integer trendId){
+    public Result getTrend(@RequestParam("trendId") Integer trendId) {
         TrendVO trend = trendService.getTrend(trendId);
         //转码内容（可能含emoji表情包）
-        if(trend.getTrendContent() != null && !trend.getTrendContent().equals("")) {
+        if (trend.getTrendContent() != null && !trend.getTrendContent().equals("")) {
             trend.setTrendContent(EmojiParser.parseToUnicode(trend.getTrendContent()));
         }
 
@@ -250,36 +256,38 @@ public class SysTrendController{
 
     /**
      * 获取用户的收藏点赞关注信息
+     *
      * @param userId
      * @return
      */
     @RequestMapping("/listByUserId")
-    public Result listByUserId(Integer userId){
+    public Result listByUserId(Integer userId) {
         //收藏
         List<SysCollect> collects = collectService.listByUserId(userId);
         //点赞
         List<SysLike> likes = likeService.listByUserId(userId);
         //关注
         List<SysFollow> follows = followService.listFollow(userId);
-        Map<String,Object> map= new HashMap<>();
-        map.put("collects",collects);
-        map.put("likes",likes);
-        map.put("follows",follows);
+        Map<String, Object> map = new HashMap<>();
+        map.put("collects", collects);
+        map.put("likes", likes);
+        map.put("follows", follows);
         return Result.success(map);
     }
 
 
     /**
      * 用户收藏的动态信息
+     *
      * @param userId
      * @return
      */
     @RequestMapping("/listcollect")
-    public Result listCollect(Integer userId){
+    public Result listCollect(Integer userId) {
         //用户的收藏
         List<SysCollect> collects = collectService.listByUserId(userId);
         List<Integer> ids = new ArrayList<>();
-        for(SysCollect col:collects){
+        for (SysCollect col : collects) {
             ids.add(col.getTrendId());
         }
         //所有动态
@@ -290,9 +298,9 @@ public class SysTrendController{
                 ids.contains(trendVOTag.getTrendId())
         ).collect(Collectors.toList());
 
-        for(TrendVO t:streams){
+        for (TrendVO t : streams) {
             //转码内容（可能含emoji表情包）
-            if(t.getTrendContent() != null && !t.getTrendContent().equals("")) {
+            if (t.getTrendContent() != null && !t.getTrendContent().equals("")) {
                 t.setTrendContent(EmojiParser.parseToUnicode(t.getTrendContent()));
             }
             //标签
@@ -322,15 +330,16 @@ public class SysTrendController{
 
     /**
      * 用户点赞的动态信息
+     *
      * @param userId
      * @return
      */
     @RequestMapping("/listlike")
-    public Result listLike(Integer userId){
+    public Result listLike(Integer userId) {
         //用户的点赞
         List<SysLike> likes = likeService.listByUserId(userId);
         List<Integer> ids = new ArrayList<>();
-        for(SysLike like:likes){
+        for (SysLike like : likes) {
             ids.add(like.getTrendId());
         }
 
@@ -343,9 +352,9 @@ public class SysTrendController{
         ).collect(Collectors.toList());
 
 
-        for(TrendVO t:streams){
+        for (TrendVO t : streams) {
             //转码内容（可能含emoji表情包）
-            if(t.getTrendContent() != null && !t.getTrendContent().equals("")) {
+            if (t.getTrendContent() != null && !t.getTrendContent().equals("")) {
                 t.setTrendContent(EmojiParser.parseToUnicode(t.getTrendContent()));
             }
             //标签
@@ -371,12 +380,13 @@ public class SysTrendController{
 
     /**
      * 删除动态
+     *
      * @param trendId
      * @return
      */
     @RequestMapping("/remove")
     @Transactional
-    public Result remove(@RequestParam("trendId") Integer trendId){
+    public Result remove(@RequestParam("trendId") Integer trendId) {
         try {
             boolean flag = trendService.removeById(trendId);
             if (flag) {
@@ -423,7 +433,7 @@ public class SysTrendController{
 
                 return Result.success("删除成功");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             //保证异常捕获之后事务还会回滚
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -436,12 +446,13 @@ public class SysTrendController{
 
     /**
      * 修改动态
+     *
      * @param data
      * @return
      */
     @RequestMapping("/update")
     @Transactional
-    public Result update(@RequestBody Map<String,Object> data){
+    public Result update(@RequestBody Map<String, Object> data) {
         try {
             //获取动态trend对象和标签tags集合
             SysTrend trend = JSON.parseObject(JSON.toJSONString(data.get("trend")), SysTrend.class);
@@ -452,7 +463,7 @@ public class SysTrendController{
             trendService.updateTrend(trend);
 
             //判断修改后的标签集合是否有内容，若有，则重新插入动态-标签数据，若没有，则将原有动态-标签数据删除
-            if(tags.size()>0){
+            if (tags.size() > 0) {
                 //有内容
                 List<SysTag> tagList = tagService.listTags(trend.getTrendId());
                 boolean flag = tagList.equals(tags);
@@ -471,7 +482,7 @@ public class SysTrendController{
                     }
                     trendTagService.saveBatch(list2);//批量插入
                 }
-            }else{
+            } else {
                 //没有内容，则需要先删除动态-标签表中的数据
                 trendTagService.remove(trend.getTrendId());
             }
@@ -479,7 +490,7 @@ public class SysTrendController{
 
             return Result.success("动态修改成功");
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             //保证异常捕获之后事务还会回滚
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -490,26 +501,28 @@ public class SysTrendController{
 
     /**
      * 大事记的动态
+     *
      * @param babyId
      * @return
      */
     @RequestMapping("/bigevents")
-    public Result bigEvents(@RequestParam("babyId") Integer babyId,@RequestParam("userId") Integer userId){
-        List<TrendVO> list = trendService.listTrend(babyId,userId);
+    public Result bigEvents(@RequestParam("babyId") Integer babyId,
+                            @RequestParam("userId") Integer userId) {
+        List<TrendVO> list = trendService.listTrend(babyId, userId);
 
         //动态-标签关系表
         List<SysTrendTag> trendTags = trendTagService.listFirst();
         List<Integer> trendIds = new ArrayList<>();
-        for(SysTrendTag t:trendTags){
+        for (SysTrendTag t : trendTags) {
             trendIds.add(t.getTrendId());
         }
         //过滤：获取有包含“第一次”的标签的动态
         List<TrendVO> trends = list.stream().filter(trendVO ->
                 trendIds.contains(trendVO.getTrendId())).collect(Collectors.toList());
 
-        for(TrendVO t:trends){
+        for (TrendVO t : trends) {
             //转码内容（可能含emoji表情包）
-            if(t.getTrendContent() != null && !t.getTrendContent().equals("")) {
+            if (t.getTrendContent() != null && !t.getTrendContent().equals("")) {
                 t.setTrendContent(EmojiParser.parseToUnicode(t.getTrendContent()));
             }
 

@@ -11,7 +11,6 @@ import com.xhu.javaprobaby.pojo.vo.BabyVO;
 import com.xhu.javaprobaby.pojo.vo.RealtiveVO;
 import com.xhu.javaprobaby.service.impl.SysIdentityServiceImpl;
 import com.xhu.javaprobaby.util.QRcodeUtils;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,7 +92,8 @@ public class SysIdentityController {
             }
             String pagePath = (String) data.get("path");
 
-            String strBaby = JSONObject.toJSONString(baby, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);//不忽略对象中属性值为空的字段
+            String strBaby = JSONObject.toJSONString(baby, SerializerFeature.PrettyFormat,
+                    SerializerFeature.WriteMapNullValue);//不忽略对象中属性值为空的字段
             String content = strBaby + "\\" + pagePath;//拼接二维码内容
             //生成邀请二维码
             String base64 = QRcodeUtils.getCodeImage(content);
